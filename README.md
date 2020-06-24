@@ -2,7 +2,7 @@
 
 Collection of Perl scripts to compute the Gap map data files for the 3D triangular mesh and the volume file of a referene brain. These scripts make it possible to provide a complete map of the cerebral cortex as part of the probabilistic cytoarchitectonic Julich-Brain Atlas.
 
-Repository: <https://github.com/JulichBrainAtlas/GapMap>
+Repository: <https://github.com/JulichBrainAtlas/GapMaps>
 
 
 ## Installation
@@ -10,7 +10,7 @@ Repository: <https://github.com/JulichBrainAtlas/GapMap>
 From source
 
 ```bash
-git clone https://github.com/JulichBrainAtlas/GapMap
+git clone https://github.com/JulichBrainAtlas/GapMaps
 ```
 
 ## Run
