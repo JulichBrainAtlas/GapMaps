@@ -1,0 +1,2 @@
+https://github.com/JulichBrainAtlas/HICoreTools 2d89d8e83eb54eaf2c58c31abbffce0567c3e784
+https://github.com/JulichBrainAtlas/ContourRecon 69b22f942e89968de2a2a9decce77feb6d62faf6

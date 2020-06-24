@@ -1,0 +1,16 @@
+Required output path in which all created files are stored in corresponding subdirectories. In addition, the follwing data sets
+must be provided:
+* GapMapInternal_Atlas_<SIDE>_N10_nlin2Std<REFERENCEBRAIN>_mpm.dat:
+      Label file with all mapped cytoarchitectonic areas and GapMaps. This is created with the help of a 3D drawing program 
+      for triangular meshes (e.g. MeshLab) from the atlas label file, which contains the MPM of the mapped cytoarchitectonic areas, 
+      in which the required boundary lines are drawn, the free areas are filled automatically and then labeled with a suitable GapName name.
+* CytoProjectList_<VERSION>.csv: 
+      Comma separated csv file with information about the ontology, area names and status. The table must have at least 21 (A-T) columns, 
+      with the status in column 17, the internal file name in column 18, the official file name in column 19 and the name used in the 
+      Human Brain Project (HBP) in 21.  
+* <REFERENCEBRAIN>_fgpmaps_datatable_orig_<SIDE>.dat
+      Text file, which indicates for each voxel in the 3D space of the reference brain, with which probability [0.0<pValue<=1.0] 
+      which area (id number) is present. It is expectd that this file is stored in the ContourRecon data path.
+* conversionlist.txt:
+      Text file that indicates to which GapMap an area should belong if the area is still under quality control and has therefore
+      not yet been published and should for this reason not yet be available to the public.
