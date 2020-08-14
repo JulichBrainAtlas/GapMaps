@@ -33,7 +33,7 @@ my $debuglevel = 0;
 my $cleanfolders = 0;
 my $reference = "colin27";
 my @sides = ("l","r");
-my $revision = defined($ARGV[1])?$ARGV[1]:undef;
+my $revision = undef;
 my $inpath = "../data/orig";
 my $inbasepath = "../data";
 my $outbasepath = "../data";
@@ -71,7 +71,7 @@ sub printusage {
   print "Error:\n ".$errortext.".\n";
   print color('reset');
  }
- print "Usage:\n ".basename($0)." [--help][(-v|--verbose)][(-d|--debug)][--cleanfolders][--reference <BRAIN>][--inpath <PATHNAME>][--outpath <PATHNAME>] --version <Public|Internal> --ontology <VERSION>\n";
+ print "Usage:\n ".basename($0)." [--help][(-v|--verbose)][(-d|--debug)][--cleanfolders][--reference <BRAIN>][--inpath <PATHNAME>][--outpath <PATHNAME>][--revision <NAME>] --version <Public|Internal> --ontology <VERSION>\n";
  print "Default parameters:\n";
  print " version........................ ".getGITRepositoryVersion()."\n";
  print " referenc brain................. ".$reference."\n";
@@ -88,6 +88,7 @@ if ( @ARGV>0 ) {
   'cleanfolders+' => \$cleanfolders,
   'inpath=s' => \$inbasepath,
   'outpath=s' => \$outbasepath,
+  'revision=s' => \$revision,
   'reference=s' => \$reference,
   'ontology=s' => \$ontologyversion,
   'version=s' => \$version) ||
@@ -165,11 +166,25 @@ if ( $version =~ m/public/i ) {
   chomp($revision);
  }
  foreach my $side (@sides) {
-  my $infilename = $inpath."/GapMap_".$side."h_N10_nlin2Std".$reference."_mpm_fullatlas".$revision.".dat";
-  if ( -e $infilename ) {
-   my $outfilename = $outpath."/GapMap".$dversion."_Atlas_".$side."_N10_nlin2Std".$reference."_mpm.dat";
-   ssystem("perl internal2public.pl --input $infilename > $outfilename",$debuglevel);
-   print "  + created file '".$outfilename."'.\n" if ( $verbose );
+  my $outfilename = $outpath."/GapMap".$dversion."_Atlas_".$side."_N10_nlin2Std".$reference."_mpm.dat";
+  if ( ! -e $outfilename ) {
+   my $origfilename = $inpath."/GapMap".$dversion."_Atlas_".$side."_N10_nlin2Std".$reference."_mpm.dat";
+   if ( ! -e $origfilename ) {
+    print " + no original file '".$origfilename."'. Creating from internal...\n" if ( $verbose );
+    my $infilename = $inpath."/GapMap".$dversion."_".$side."h_N10_nlin2Std".$reference."_mpm";
+    $infilename .= "_".$revision if ( length($revision)>0 );
+    $infilename .= ".dat";
+    if ( -e $infilename ) {
+     ssystem("perl internal2public.pl --input $infilename > $outfilename",$debuglevel);
+     print "  + created file '".$outfilename."'.\n" if ( $verbose );
+    } else {
+     printfatalerror "FATAL ERROR: Cannot find input file '".$infilename."'.\n";
+    }
+   } else {
+    copy($origfilename,$outfilename) || printfatalerror "FATAL ERROR: Copy failure: $!";
+   }
+  }
+  if ( -e $outfilename ) {
    my $jubdoutfilename = $outfilename;
    $jubdoutfilename =~ s/\.dat//;
    ssystem("jubrainconverter -i $outfilename -o $jubdoutfilename --hint binary",$debuglevel);
@@ -183,7 +198,7 @@ if ( $version =~ m/public/i ) {
    ssystem("jubrainconverter -i $goutfilename -o $jubd2outfilename --hint binary",$debuglevel);
    print "  + created file '".$jubd2outfilename."'.\n" if ( $verbose );
   } else {
-   printfatalerror "ERROR: Cannot find input file '".$infilename."'.\n";
+   printfatalerror "FATAL ERROR: No output file '".$outfilename."' $!";
   }
  }
 } elsif ( $version =~ m/internal/i ) {
@@ -219,7 +234,7 @@ if ( $version =~ m/public/i ) {
 print "Executing data processing steps...\n" if ( $verbose );
 my $options = "--inpath ".$outbasepath;
 $options .= " --verbose" if ( $verbose );
-ssystem("perl $options createvolume.pl --version $dversion",$debuglevel);
-ssystem("perl $options fakemaps.pl --version $dversion",$debuglevel);
-ssystem("perl $options colorbar.pl --version $dversion --ontology $ontologyversion",$debuglevel);
-ssystem("perl $options topology.pl --version $dversion --ontology $ontologyversion",$debuglevel);
+ssystem("perl createvolume.pl $options --version $dversion",$debuglevel);
+ssystem("perl fakemaps.pl $options --version $dversion",$debuglevel);
+ssystem("perl colorbar.pl $options --version $dversion --ontology $ontologyversion",$debuglevel);
+ssystem("perl topology.pl $options --version $dversion --ontology $ontologyversion",$debuglevel);
