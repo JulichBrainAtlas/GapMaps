@@ -249,7 +249,7 @@ if ( $extractareas ) {
      $gapmapfile =~ s/_pmap.dat/_pmap/;
      if ( ! -e $gapmapfile || $overwrite ) {
       print "  + computing JulichBrain label file '".$gapmapfile."'...\n" if ( $verbose );
-      ssystem("jubrainconverter -i ".$pmapfile." -out ".$gapmapfile." --hint binary -v --debug --ispmap --like colin",$debuglevel);
+      ssystem("jubrainconverter -i ".$pmapfile." -out ".$gapmapfile." --hint binary -v --debug --ispmap --like ".$reference,$debuglevel);
      }
      print "  + thresholding label $areaname at threshold $areaid...\n";
      my $labelfilename = $outpath."/GapMap".$dataversion."_".$areaname."_".$sidec."_N10_nlin2Std".$reference."_mpm.nii.gz";
@@ -322,7 +322,7 @@ if ( $fill ) {
      printwarning " - missing mpm labelfile '".$mpmlabeloutfilename."'.\n";
     }
     # pmap stuff
-    my $pmapfile = $outpath."/GapMap".$dataversion."_".$name."_".$sidec."_N10_nlin2Stdcolin27_pmap.dat";
+    my $pmapfile = $outpath."/GapMap".$dataversion."_".$name."_".$sidec."_N10_nlin2Std".$reference."_pmap.dat";
     if ( ! -e $pmapfile || $overwrite ) {
      ssystem("label2volume $opts -i $gapmapfile --out ".$pmapfile." $sideopt --surftype n --pmap $threshold",$debuglevel);
     }
@@ -332,10 +332,10 @@ if ( $fill ) {
     $gapmapfile =~ s/_pmap.dat/_pmap/;
     if ( ! -e $gapmapfile || $overwrite ) {
      print "  + computing JulichBrain label file '".$gapmapfile."'...\n" if ( $verbose );
-     ssystem("jubrainconverter -i ".$pmapfile." -out ".$gapmapfile." --hint binary -v --debug --ispmap --like colin",$debuglevel);
+     ssystem("jubrainconverter -i ".$pmapfile." -out ".$gapmapfile." --hint binary -v --debug --ispmap --like ".$reference,$debuglevel);
     }
     print "  + thresholding label $name at threshold $threshold...\n";
-    my $labelfilename = $outpath."/GapMap".$dataversion."_".$name."_".$sidec."_N10_nlin2Stdcolin27_mpm.nii.gz";
+    my $labelfilename = $outpath."/GapMap".$dataversion."_".$name."_".$sidec."_N10_nlin2Std".$reference."_mpm.nii.gz";
     ssystem("hitThreshold -i $volfilename -g $threshold -o $labelfilename -b 255 -v -f",$debuglevel);
    }
   } else {
