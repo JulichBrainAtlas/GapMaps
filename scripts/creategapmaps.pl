@@ -223,7 +223,7 @@ if ( $version =~ m/public/i ) {
    ssystem("jubrainconverter -i $goutfilename -o $jubd2outfilename --hint binary",$debuglevel);
    print "  + created file '".$jubd2outfilename."'\n" if ( $verbose );
   } else {
-   printfatalerror "ERROR: Cannot find input file '".$infilename."'.\n";
+   printfatalerror "FATAL ERROR: Cannot find input file '".$infilename."'.\n";
   }
  }
 } else {
