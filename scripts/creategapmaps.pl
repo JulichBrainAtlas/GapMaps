@@ -233,6 +233,7 @@ if ( $version =~ m/public/i ) {
 ### for both
 print "Executing data processing steps...\n" if ( $verbose );
 my $options = "--inpath ".$outbasepath;
+$options .= " --reference ".$reference;
 $options .= " --verbose" if ( $verbose );
 ssystem("perl createvolume.pl $options --version $dversion",$debuglevel);
 ssystem("perl fakemaps.pl $options --version $dversion",$debuglevel);
