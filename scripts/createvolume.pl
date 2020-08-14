@@ -190,6 +190,7 @@ sub getArealNameInfos {
 ### >>>
 my $outpath = $basepath."/maps";
 my $opts = "--overwrite --verbose";
+$opts .= " --reference ".$reference;
 my @sides = ("left","right");
 
 ### checking executables
