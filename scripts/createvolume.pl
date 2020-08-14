@@ -235,7 +235,7 @@ if ( $extractareas ) {
       print "   + saved area label file '".$areafilename."'.\n" if ( $verbose );
       my $areajubdfilename = $areafilename;
       $areajubdfilename =~ s/\.dat//;
-      ssystem("jubrainconverter -i ".$areafilename." -out ".$areajubdfilename." --hint binary -v --debug --like colin",$debuglevel);
+      ssystem("jubrainconverter -i ".$areafilename." -out ".$areajubdfilename." --hint binary -v --debug --like ".$reference,$debuglevel);
       print "   + saved jubd area label file '".$areajubdfilename."'.\n";
      }
      ### create pmaps
