@@ -49,7 +49,7 @@ sub printusage {
   print "error:\n ".$errortext.".\n";
   print color('reset');
  }
- print "usage:\n ".basename($0)." [--help][(-v|--verbose)][(-d|--debug)][--reference <BRAIN>][--extract-areas][--inpath <PATHNAME>] --version <Public|Internal>\n";
+ print "usage:\n ".basename($0)." [--help][(-v|--verbose)][--overwrite][(-d|--debug)][--reference <BRAIN>][--extract-areas][--inpath <PATHNAME>] --version <Public|Internal>\n";
  print "default parameters:\n";
  print " referenc brain................. ".$reference."\n";
  print " input data path................ '".$basepath."'\n";
@@ -61,6 +61,7 @@ if ( @ARGV>0 ) {
   'help+' => \$help,
   'debug|d+' => \$debuglevel,
   'verbose|v+' => \$verbose,
+  'overwrite+' => \$overwrite,
   'inpath=s' => \$basepath,
   'reference=s' => \$reference,
   'extract-areas+' => \$extractareas,
