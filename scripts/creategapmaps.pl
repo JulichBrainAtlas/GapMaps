@@ -236,6 +236,6 @@ my $options = "--inpath ".$outbasepath;
 $options .= " --reference ".$reference;
 $options .= " --verbose" if ( $verbose );
 ssystem("perl createvolume.pl $options --version $dversion",$debuglevel);
-ssystem("perl fakemaps.pl $options --version $dversion",$debuglevel);
+ssystem("perl fakemaps.pl $options --version $dversion --ontology $ontologyversion",$debuglevel);
 ssystem("perl colorbar.pl $options --version $dversion --ontology $ontologyversion",$debuglevel);
 ssystem("perl topology.pl $options --version $dversion --ontology $ontologyversion",$debuglevel);
