@@ -27,8 +27,13 @@ use hitperl;
 use hitperl::git;
 
 ### >>>
+my $logfilepath = $ENV{HITHOME}."/logs";
+printfatalerror "FATAL ERROR: Invalid logfile path: $!" unless ( -d $logfilepath );
+
+### >>>
 my $help = 0;
 my $verbose = 0;
+my $history = 0;
 my $debuglevel = 0;
 my $cleanfolders = 0;
 my $reference = "colin27";
@@ -39,6 +44,7 @@ my $inbasepath = "../data";
 my $outbasepath = "../data";
 my $version = undef;
 my $ontologyversion = undef;
+my @argvlist = ();
 
 ### check whether external executables have been installed
 my @executables = ("hitConverter","hitOverlay","hitFilter","hitGaussFilter","hitThreshold");
@@ -71,18 +77,23 @@ sub printusage {
   print "Error:\n ".$errortext.".\n";
   print color('reset');
  }
- print "Usage:\n ".basename($0)." [--help][(-v|--verbose)][(-d|--debug)][--cleanfolders][--reference <BRAIN>][--inpath <PATHNAME>][--outpath <PATHNAME>][--revision <NAME>] --version <Public|Internal> --ontology <VERSION>\n";
+ print "Usage:\n ".basename($0)." [--help][--history][(-v|--verbose)][(-d|--debug)][--cleanfolders][--reference <BRAIN>][--inpath <PATHNAME>][--outpath <PATHNAME>][--revision <NAME>] --version <Public|Internal> --ontology <VERSION>\n";
  print "Default parameters:\n";
  print " version........................ ".getGITRepositoryVersion()."\n";
  print " referenc brain................. ".$reference."\n";
  print " input base path................ '".$inbasepath."'\n";
  print " output base path............... '".$outbasepath."'\n";
- print " last call...................... '".getLastProgramLogMessage($0)."'\n";
+ print " logfile path................... '".$logfilepath."'\n";
+ print " last call...................... '".getLastProgramLogMessage($0,$logfilepath)."'\n";
  exit(1);
 }
 if ( @ARGV>0 ) {
+ foreach my $argnum (0..$#ARGV) {
+  push(@argvlist,$ARGV[$argnum]);
+ }
  GetOptions(
   'help+' => \$help,
+  'history+' => \$history,
   'debug|d+' => \$debuglevel,
   'verbose|v+' => \$verbose,
   'cleanfolders+' => \$cleanfolders,
@@ -95,9 +106,13 @@ if ( @ARGV>0 ) {
  printusage();
 }
 printusage() if $help;
+printProgramLog($0,1,$logfilepath) if $history;
 printusage("Missing required executables. See https://github.com/JulichBrainAtlas/GapMap for details") if ( $nfails>0 );
 printusage("Missing input parameters") if ( !defined($version) && !defined($ontologyversion) );
 printusage("Invalid version. Use Public or Internal") if ( !($version =~ m/^Public$/) && !($version =~ m/^Internal$/) );
+
+### >>>
+createProgramLog($0,\@argvlist,$debuglevel,$logfilepath);
 
 ### setup folders
 my $outpath = $outbasepath."/raw";
